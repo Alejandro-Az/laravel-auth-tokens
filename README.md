@@ -1,4 +1,4 @@
-# Laravel Auth App
+# Laravel Auth App 🔐
 
 Proyecto de autenticación desarrollado con **Laravel 10**, pensado como base profesional para aplicaciones modernas que requieren:
 
