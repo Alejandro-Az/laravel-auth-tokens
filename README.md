@@ -28,3 +28,19 @@ cd TU_REPO
 composer install
 cp .env.example .env
 php artisan key:generate
+
+
+---
+
+Este repositorio es una demostración completa de autenticación y autorización con buenas prácticas:
+
+- Sanctum (tokens)
+- Roles y permisos
+- Form Request
+- Policies y Gates
+- Services
+- Vistas web funcionales y estilizadas
+
+Puedes usarlo como base para construir APIs profesionales o integrarlo con un frontend como React.
+
+---

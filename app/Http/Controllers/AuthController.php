@@ -6,67 +6,49 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\LoginRequest;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    // Registro de usuario
-    public function register(Request $request)
+    protected $authService;
+
+    public function __construct(AuthService $authService)
     {
-        $fields = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|confirmed|min:6',
-        ]);
-
-        $role = \App\Models\Role::where('name', 'Usuario')->first();
-
-        if (!$role) {
-            return response()->json(['error' => 'Rol Usuario no encontrado'], 500);
-        }
-        
-
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => Hash::make($fields['password']),
-            'role_id' => $role->id,
-        ]);
-
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        $user->load('role');
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ], 201);
-
+        $this->authService = $authService;
     }
 
-    // Login de usuario
-    public function login(Request $request)
+    public function register(RegisterUserRequest $request)
     {
-        $fields = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        try {
+            $data = $this->authService->register($request->validated());
 
-        $user = User::where('email', $fields['email'])->first();
-
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response()->json(['message' => 'Credenciales incorrectas'], 401);
+            return response()->json($data, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ], 200);
     }
 
-    // Logout del usuario
+    public function edit(User $user)
+    {
+        $this->authorize('update', $user);
+
+        return view('user.edit', compact('user'));
+    }
+
+
+    public function login(LoginRequest $request)
+    {
+        try {
+            $data = $this->authService->login($request->validated());
+
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
+    }
+
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();

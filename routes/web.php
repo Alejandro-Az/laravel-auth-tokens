@@ -18,6 +18,18 @@ use App\Models\Role;
 |
 */
 
+Route::get('/usuarios/{user}', function (User $user) {
+    return $user;
+})->middleware(['auth', 'can:view,user']);
+
+Route::middleware(['auth'])->get('/usuarios/{user}/editar', function (User $user) {
+    return "<h2>Formulario para editar a {$user->name}</h2>";
+})->middleware('can:update,user');
+
+Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->middleware('auth');
+
+
+
 Route::get('/register', function () {
     return view('register');
 })->name('register');
