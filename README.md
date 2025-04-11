@@ -32,15 +32,20 @@ php artisan key:generate
 
 ---
 
-Este repositorio es una demostración completa de autenticación y autorización con buenas prácticas:
+## 🎓 Finalidad de este proyecto
 
-- Sanctum (tokens)
-- Roles y permisos
-- Form Request
-- Policies y Gates
-- Services
-- Vistas web funcionales y estilizadas
+Este repositorio fue desarrollado como **base profesional de autenticación con Laravel 10 y tokens usando Sanctum**, incluyendo buenas prácticas reales de backend:
 
-Puedes usarlo como base para construir APIs profesionales o integrarlo con un frontend como React.
+- Validación con `FormRequest`
+- Separación de lógica con `Service`
+- Roles (`Administrador`, `Usuario`)
+- Policies y Gates para autorización
+- Rutas protegidas con middleware
+- Vistas web personalizadas con CSS externo
+
+Este proyecto está pensado como punto de partida para APIs RESTful, SPAs con React/Vue o aplicaciones web completas.
+
+Puedes reutilizarlo como esqueleto para construir proyectos reales de producción.
 
 ---
+
